@@ -1,9 +1,9 @@
 #include <check.h>
-#include "../src/rpn_converter.h"
+#include "../src/rpnconverter.h"
 
 START_TEST(whenRPNConverterIsPassedOperatorsInInfixItReturnsOperatorsInRPN)
 {   
-    ck_assert_str_eq(rpnconverter("a+b"), "ab+");
+    ck_assert_str_eq(rpnconverter_infix2rpn("a+b"), "ab+");
 }
 END_TEST
     

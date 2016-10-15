@@ -1,6 +1,6 @@
-#include "rpn_converter.h"
+#include "rpnconverter.h"
 
-char *rpnconverter(char *alg)
+char *rpnconverter_infix2rpn(char *alg)
 {
     //Initialize main variables
     const char * operators = "-+";

@@ -3,6 +3,6 @@
 #ifndef RPNConverter
 #define RPNConverter
 
-char *rpnconverter(char *alg);
+char *rpnconverter_infix2rpn(char *alg);
 
 #endif

@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-std=c99 -Wall -I.
 LDFLAGS=-std=c99 -Wall
-SOURCES=src/rpn_converter.c test/check_rpn_converter.c
+SOURCES=src/rpnconverter.c test/check_rpnconverter.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=rpnconverter
 LIBS=-pthread -pthread -lcheck_pic -lrt -lm -lcheck
