@@ -1,5 +1,31 @@
 #include "rpnconverter.h"
 
+int rpnconverter_autoselect(char *alg)
+{
+    //Initialize main variables
+    const char * operators = "-+";
+    int operandFound = 0;
+    //Loop through all characters from the input string and check them against the operators array.
+    //If 2 or more operands are found back to back then assume notation is RPN else assume notation is Infix.
+    for(int i=0;i<strlen(alg);i++)
+    {
+        operandFound++;
+        for(int j=0;j<strlen(operators);j++)
+        {
+            if(alg[i] == operators[j])
+            {
+                operandFound = 0;
+                break;
+            }
+        }
+        if(operandFound >=2)
+        {
+            return 1; // 1 represents Reverse Polish Notation
+        }
+    }
+    return 2; // 2 represents Infix Notation
+}
+
 char *rpnconverter_infix2rpn(char *alg)
 {
     //Initialize main variables
@@ -7,9 +33,12 @@ char *rpnconverter_infix2rpn(char *alg)
     char * newAlg;
     int operatorFound;
     //Change the size of newAlg to match that of alg and exit with error code if unsuccessful.
-    if((newAlg = malloc(strlen(alg)+1)) != NULL){
+    if((newAlg = malloc(strlen(alg)+1)) != NULL)
+    {
         newAlg[0] = '\0';
-    } else {
+    } 
+    else 
+    {
         exit(1);
     }
     //Loop through all characters from the input string and check them against the operators array.
