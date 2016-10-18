@@ -1,6 +1,12 @@
 #include <check.h>
 #include "../src/rpnconverter.h"
 
+START_TEST(whenRPNConverterMainFunctionIsPassedEitherRPNorInfixReturnConvertedAlg)
+{   
+    ck_assert_str_eq(rpnconverter("ab+"), "a+b");
+    ck_assert_str_eq(rpnconverter("a+b"), "ab+");
+}
+END_TEST
 START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixReturnItInRPN)
 {   
     ck_assert_str_eq(rpnconverter_infix2rpn("a+b"), "ab+");
@@ -31,7 +37,8 @@ Suite * rpn_suite(void)
     s = suite_create("RPNConverter");
     
     tc_core = tcase_create("Core");
-
+    
+    tcase_add_test(tc_core, whenRPNConverterMainFunctionIsPassedEitherRPNorInfixReturnConvertedAlg);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixReturnItInRPN);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);

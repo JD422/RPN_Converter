@@ -1,5 +1,29 @@
 #include "rpnconverter.h"
 
+char *rpnconverter(char *alg)
+{
+    char * newAlg;
+    //Change the size of newAlg to match that of alg and exit with error code if unsuccessful.
+    if((newAlg = malloc(strlen(alg)+1)) != NULL)
+    {
+        newAlg[0] = '\0';
+    } 
+    else 
+    {
+        exit(1);
+    }
+    switch(rpnconverter_autoselect(alg))
+    {
+        case 1 :
+        newAlg = rpnconverter_rpn2infix(alg);
+        break;
+        case 2 :
+        newAlg = rpnconverter_infix2rpn(alg);
+        break;
+    }
+    return newAlg;
+}
+
 int rpnconverter_autoselect(char *alg)
 {
     //Initialize main variables
