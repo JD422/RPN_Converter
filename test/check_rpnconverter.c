@@ -16,6 +16,11 @@ START_TEST(whenRPNConverterIsPassedRPNReturnIdentifierForRPN)
     ck_assert_int_eq(rpnconverter_autoselect("ab+"), 1);
 }
 END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix)
+{   
+    ck_assert_str_eq(rpnconverter_rpn2infix("ab+"), "a+b");
+}
+END_TEST
     
 Suite * rpn_suite(void)
 {
@@ -29,6 +34,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterIsPassedOperatorsInInfixItReturnsOperatorsInRPN);
     tcase_add_test(tc_core, whenRPNConverterIsPassedInfixNotationReturnIdentifierForInfixNotation);
     tcase_add_test(tc_core, whenRPNConverterIsPassedRPNReturnIdentifierForRPN);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix);
     suite_add_tcase(s, tc_core);
 
     return s;
