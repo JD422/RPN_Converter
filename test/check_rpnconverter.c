@@ -27,6 +27,11 @@ START_TEST(whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN)
     ck_assert_int_eq(rpnconverter_autoselect("ab+"), 1);
 }
 END_TEST
+START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedAlgorithmReturnAllUsedOperatorsInProperOrder)
+{   
+    ck_assert_str_eq(rpnconverter_orderOfOperation("a*b^c+d/e-f^g"), "^^*/+-");
+}
+END_TEST
 
     
 Suite * rpn_suite(void)
@@ -43,6 +48,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN);
+    tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedAlgorithmReturnAllUsedOperatorsInProperOrder);
     suite_add_tcase(s, tc_core);
 
     return s;

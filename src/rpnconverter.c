@@ -125,3 +125,39 @@ char *rpnconverter_rpn2infix(char *alg)
     }
     return newAlg;
 };
+
+char *rpnconverter_orderOfOperation(char *alg)
+{
+    int i;
+    char * orderArray = malloc(1);
+    char * operatorsOne = "^";
+    char * operatorsTwo = "/*";
+    char * operatorsThree = "-+";
+    strcpy(orderArray, "0");
+    for(i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] == operatorsOne[0])
+        {
+            orderArray = realloc(orderArray, strlen(orderArray)+1);
+            orderArray[strlen(orderArray)] = alg[i];
+        }
+    }
+    for(i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] == operatorsTwo[0] || alg[i] == operatorsTwo[1])
+        {
+            orderArray = realloc(orderArray, strlen(orderArray)+1);
+            orderArray[strlen(orderArray)] = alg[i];
+        }
+    }
+    for(i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] == operatorsThree[0] || alg[i] == operatorsThree[1])
+        {
+            orderArray = realloc(orderArray, strlen(orderArray)+1);
+            orderArray[strlen(orderArray)] = alg[i];
+        }
+    }
+    memmove(orderArray, orderArray+1, strlen(orderArray+1) + 1);
+    return orderArray;
+}
