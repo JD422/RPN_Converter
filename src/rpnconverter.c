@@ -2,41 +2,32 @@
 
 char *rpnconverter(char *alg)
 {
-    char * newAlg;
-    //Change the size of newAlg to match that of alg and exit with error code if unsuccessful.
-    if((newAlg = malloc(strlen(alg)+1)) != NULL)
-    {
-        newAlg[0] = '\0';
-    } 
-    else 
-    {
-        exit(1);
-    }
+    char * conAlg = NULL;
     switch(rpnconverter_autoselect(alg))
     {
         case 1 :
-        newAlg = rpnconverter_rpn2infix(alg);
+        conAlg = rpnconverter_rpn2infix(alg);
         break;
         case 2 :
-        newAlg = rpnconverter_infix2rpn(alg);
+        conAlg = rpnconverter_infix2rpn(alg);
         break;
     }
-    return newAlg;
+    return conAlg;
 }
 
 int rpnconverter_autoselect(char *alg)
 {
     //Initialize main variables
-    const char * operators = "-+";
+    const char * autoOperators = "-+";
     int operandFound = 0;
     //Loop through all characters from the input string and check them against the operators array.
     //If 2 or more operands are found back to back then assume notation is RPN else assume notation is Infix.
     for(int i=0;i<strlen(alg);i++)
     {
         operandFound++;
-        for(int j=0;j<strlen(operators);j++)
+        for(int j=0;j<strlen(autoOperators);j++)
         {
-            if(alg[i] == operators[j])
+            if(alg[i] == autoOperators[j])
             {
                 operandFound = 0;
                 break;
@@ -53,111 +44,102 @@ int rpnconverter_autoselect(char *alg)
 char *rpnconverter_infix2rpn(char *alg)
 {
     //Initialize main variables
-    const char * operators = "-+";
-    char * newAlg;
-    int operatorFound;
-    //Change the size of newAlg to match that of alg and exit with error code if unsuccessful.
-    if((newAlg = malloc(strlen(alg)+1)) != NULL)
-    {
-        newAlg[0] = '\0';
-    } 
-    else 
-    {
-        exit(1);
-    }
+    char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
+    char * infixOperators = rpnconverter_orderOfOperation(alg);
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the newAlg string.
-    for(int i=0;i<strlen(alg);i++)
+    for(int j=0;j<strlen(infixOperators);j++)
     {
-        operatorFound = 0;
-        for(int j=0;j<strlen(operators);j++)
+        for(int i=0;i<strlen(alg);i++)
         {
-            if(alg[i] == operators[j])
+            if(alg[i] == infixOperators[j])
             {
-                operatorFound = 1;
-                newAlg[i] = alg[i+1];
-                newAlg[i+1] = alg[i];
+                infixAlg[i] = alg[i+1];
+                infixAlg[i+1] = alg[i];
                 i++;
             }
-        }
-        if(operatorFound == 0)
-        {
-            newAlg[i] = alg[i];
+            else
+            {
+                infixAlg[i] = alg[i];
+            }
         }
     }
-    return newAlg;
+    free(infixOperators);
+    return infixAlg;
 };
 
 char *rpnconverter_rpn2infix(char *alg)
 {
     //Initialize main variables
-    const char * operators = "-+";
-    char * newAlg;
-    int operatorFound;
-    //Change the size of newAlg to match that of alg and exit with error code if unsuccessful.
-    if((newAlg = malloc(strlen(alg)+1)) != NULL)
-    {
-        newAlg[0] = '\0';
-    } 
-    else 
-    {
-        exit(1);
-    }
+    char * rpnAlg = calloc(strlen(alg)+1,sizeof(char));
+    char * rpnOperators = rpnconverter_orderOfOperation(alg);
+    
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the newAlg string.
-    for(int i=0;i<strlen(alg);i++)
+    for(int j=0;j<strlen(rpnOperators);j++)
     {
-        operatorFound = 0;
-        for(int j=0;j<strlen(operators);j++)
+        for(int i=0;i<strlen(alg);i++)
         {
-            if(alg[i] == operators[j])
+            if(alg[i] == rpnOperators[j])
             {
-                operatorFound = 1;
-                newAlg[i] = alg[i-1];
-                newAlg[i-1] = alg[i];
+                rpnAlg[i] = alg[i-1];
+                rpnAlg[i-1] = alg[i];
                 i++;
             }
-        }
-        if(operatorFound == 0)
-        {
-            newAlg[i] = alg[i];
+            else
+            {
+                rpnAlg[i] = alg[i];
+            }
         }
     }
-    return newAlg;
+    free(rpnOperators);
+    return rpnAlg;
 };
 
 char *rpnconverter_orderOfOperation(char *alg)
 {
-    int i;
-    char * orderArray = malloc(1);
+    int i, j = 0, l = 0;
+    char * operators = "^/*-+";
     char * operatorsOne = "^";
     char * operatorsTwo = "/*";
     char * operatorsThree = "-+";
-    strcpy(orderArray, "0");
+    
+    for(i=0;i<strlen(alg);i++)
+    {
+        for(int k=0;k<strlen(operators);k++)
+        {
+            if(alg[i] == operators[k])
+            {
+                l++;
+            }
+        }
+    }
+    
+    char *orderArray = calloc(l+1, sizeof(char));
+    
     for(i=0;i<strlen(alg);i++)
     {
         if(alg[i] == operatorsOne[0])
         {
-            orderArray = realloc(orderArray, strlen(orderArray)+1);
-            orderArray[strlen(orderArray)] = alg[i];
+            orderArray[j] = alg[i];
+            j++;
         }
     }
     for(i=0;i<strlen(alg);i++)
     {
         if(alg[i] == operatorsTwo[0] || alg[i] == operatorsTwo[1])
         {
-            orderArray = realloc(orderArray, strlen(orderArray)+1);
-            orderArray[strlen(orderArray)] = alg[i];
+            orderArray[j] = alg[i];
+            j++;
         }
     }
     for(i=0;i<strlen(alg);i++)
     {
         if(alg[i] == operatorsThree[0] || alg[i] == operatorsThree[1])
         {
-            orderArray = realloc(orderArray, strlen(orderArray)+1);
-            orderArray[strlen(orderArray)] = alg[i];
+            orderArray[j] = alg[i];
+            j++;
         }
     }
-    memmove(orderArray, orderArray+1, strlen(orderArray+1) + 1);
     return orderArray;
 }
