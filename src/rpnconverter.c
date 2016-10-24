@@ -100,27 +100,58 @@ char *rpnconverter_infix2rpn(char *alg)
 char *rpnconverter_rpn2infix(char *alg)
 {
     //Initialize main variables
+    int i = 0, j = 0, span = 1;
     char * rpnAlg = calloc(strlen(alg)+1,sizeof(char));
+    char * rpnTemp = calloc(strlen(alg)+1,sizeof(char));
     char * rpnOperators = rpnconverter_orderOfOperation(alg);
-    
     //Loop through all characters from the input string and check them against the operators array.
-    //If an Operator is found then save the character in its corrected place in the newAlg string.
-    for(int j=0;j<strlen(rpnOperators);j++)
+    //If an Operator is found then save the character in its corrected place in the infixAlg string.
+    strcpy(rpnAlg, alg);
+    strcpy(rpnTemp, rpnAlg);
+    while(j<strlen(rpnOperators))
     {
-        for(int i=0;i<strlen(alg);i++)
+        if(rpnAlg[i] == rpnOperators[j])
         {
-            if(alg[i] == rpnOperators[j])
+            strcpy(rpnTemp, rpnAlg);
+            if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 1)
             {
-                rpnAlg[i] = alg[i-1];
-                rpnAlg[i-1] = alg[i];
+                while(rpnconverter_isValidOperator(rpnAlg[i-span*2]) == 1 && i-span > 0)
+                {
+                        span++;
+                }
+                span = span * 2 - 1;
+                for(int l=0;l<span;l++)
+                {
+                    rpnAlg[i-l] = rpnTemp[i-l-1];
+                }
+                rpnAlg[i-span] = rpnOperators[j];
+                i=i+span-1;
+            }
+            else
+            {
+                rpnAlg[i] = rpnTemp[i-1];
+                rpnAlg[i-1] = rpnTemp[i];
+                i++;
+            }
+            if((j) != strlen(rpnOperators))
+            {
+                span=1;
+                j++;
+            }
+        }
+        else
+        {
+            if(i<strlen(rpnAlg))
+            {
                 i++;
             }
             else
             {
-                rpnAlg[i] = alg[i];
+                i=0;
             }
         }
     }
+    free(rpnTemp);
     free(rpnOperators);
     return rpnAlg;
 };
@@ -143,7 +174,6 @@ char *rpnconverter_orderOfOperation(char *alg)
             }
         }
     }
-    
     char *orderArray = calloc(l+1, sizeof(char));
     
     for(i=0;i<strlen(alg);i++)
