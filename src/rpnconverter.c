@@ -44,26 +44,55 @@ int rpnconverter_autoselect(char *alg)
 char *rpnconverter_infix2rpn(char *alg)
 {
     //Initialize main variables
+    int i = 0, j = 0, span = 1;
     char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
+    char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     char * infixOperators = rpnconverter_orderOfOperation(alg);
     //Loop through all characters from the input string and check them against the operators array.
-    //If an Operator is found then save the character in its corrected place in the newAlg string.
-    for(int j=0;j<strlen(infixOperators);j++)
+    //If an Operator is found then save the character in its corrected place in the infixAlg string.
+    strcpy(infixAlg, alg);
+    strcpy(infixTemp, infixAlg);
+    while(j<strlen(infixOperators))
     {
-        for(int i=0;i<strlen(alg);i++)
+        if(infixAlg[i] == infixOperators[j])
         {
-            if(alg[i] == infixOperators[j])
+            strcpy(infixTemp, infixAlg);
+            if(rpnconverter_isValidOperator(infixAlg[i+2]) == 0 && (i+2) < strlen(infixAlg))
             {
-                infixAlg[i] = alg[i+1];
-                infixAlg[i+1] = alg[i];
-                i++;
+                while(rpnconverter_isValidOperator(infixAlg[i+span]) == 0 && i+span < strlen(infixAlg))
+                {
+                        span++;
+                }
+                span = span + 1;
+                for(int l=0;l<span;l++)
+                {
+                    infixAlg[i+l] = infixTemp[i+l+1];
+                }
+                infixAlg[i+span-1] = infixOperators[j];
+                i=i+span-1;
             }
             else
             {
-                infixAlg[i] = alg[i];
+                infixAlg[i] = infixTemp[i+1];
+                infixAlg[i+1] = infixTemp[i];
+                i++;
+            }
+            if((j) != strlen(infixOperators))
+            {
+                span=1;
+                j++;
             }
         }
+        if(i<strlen(infixAlg))
+        {
+            i++;
+        }
+        else
+        {
+            i = 0;
+        }
     }
+    free(infixTemp);
     free(infixOperators);
     return infixAlg;
 };
@@ -142,4 +171,21 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
     }
     return orderArray;
+}
+
+int rpnconverter_isValidOperator(char operator)
+{
+    int isOperator = 0;
+    char * validOperators = "^/*-+";
+    
+    for(int i=0;i<strlen(validOperators);i++)
+    {
+        if(validOperators[i] == operator)
+        {
+            isOperator = 1;
+            break;
+        }
+    }
+    
+    return isOperator;
 }

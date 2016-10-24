@@ -10,6 +10,8 @@ END_TEST
 START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixReturnItInRPN)
 {   
     ck_assert_str_eq(rpnconverter_infix2rpn("a+b"), "ab+");
+    ck_assert_str_eq(rpnconverter_infix2rpn("a+b-c*d"), "ab+cd*-");
+    ck_assert_str_eq(rpnconverter_infix2rpn("a/b+c^d+f"), "ab/cd^+f+");
 }
 END_TEST
 START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix)
