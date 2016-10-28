@@ -18,7 +18,7 @@ char *rpnconverter(char *alg)
 int rpnconverter_autoselect(char *alg)
 {
     //Initialize main variables
-    const char * autoOperators = "-+";
+    const char * autoOperators = "^/*-+";
     int operandFound = 0;
     //Loop through all characters from the input string and check them against the operators array.
     //If 2 or more operands are found back to back then assume notation is RPN else assume notation is Infix.
@@ -158,7 +158,9 @@ char *rpnconverter_rpn2infix(char *alg)
 
 char *rpnconverter_orderOfOperation(char *alg)
 {
-    int i, j = 0, l = 0;
+    int i, j = 0, l = 0, n = 0, o = 0, q = 0, skip = 0, temp1,temp2;
+    char * nullPointer = "0";
+    char * specialOperator = "()";
     char * operators = "^/*-+";
     char * operatorsOne = "^";
     char * operatorsTwo = "/*";
@@ -178,26 +180,121 @@ char *rpnconverter_orderOfOperation(char *alg)
     
     for(i=0;i<strlen(alg);i++)
     {
-        if(alg[i] == operatorsOne[0])
+        if(alg[i] == specialOperator[0])
         {
-            orderArray[j] = alg[i];
-            j++;
+            q++;
         }
     }
-    for(i=0;i<strlen(alg);i++)
+    if(q > 0)
     {
-        if(alg[i] == operatorsTwo[0] || alg[i] == operatorsTwo[1])
+        char * specialStart = calloc(q,sizeof(int));
+        o=0;
+        for(i=0;i<strlen(alg);i++)
         {
-            orderArray[j] = alg[i];
-            j++;
+            if(alg[i] == specialOperator[0])
+            {
+                specialStart[o] = i;
+                o++;
+            }
+        }
+
+        char * special = calloc(q*2,sizeof(int));
+        o=0;
+        for(i=0;i<q;i++)
+        {
+            special[o] = specialStart[i];
+            o++;
+            n = specialStart[i]+1;
+            while(n<strlen(alg))
+            {
+                if(alg[n] == specialOperator[0])
+                {
+                    skip++;
+                }
+                else if(alg[n] == specialOperator[1] && skip != 0)
+                {
+                    skip--;
+                }
+                else if(alg[n] == specialOperator[1] && skip == 0)
+                {
+                    special[o] = n;
+                    o++;
+                    break;
+                }
+                n++;
+            }
+        }
+        for(int z=0;z<q*2;z+=2)
+        {
+            if(special[z] < special[z+2] && special[z+1] > special[z+3])
+            {
+                temp1 = special[z];
+                temp2 = special[z+1];
+                special[z] = special[z+2];
+                special[z+1] = special[z+3];
+                special[z+2] = temp1;
+                special[z+3] = temp2;
+                z = -2;
+            }
+        }
+        char * tempArray = calloc(strlen(alg),sizeof(char));
+        strcpy(tempArray,alg);
+        for(int x=0;x<q*2;x+=2)
+        {
+            for(i=special[x];i<special[x+1];i++)
+            {
+                if(tempArray[i] == operatorsOne[0])
+                {
+                    orderArray[j] = tempArray[i];
+                    tempArray[i] = nullPointer[0];
+                    j++;
+                }
+            }
+            for(i=special[x];i<special[x+1];i++)
+            {
+                if(tempArray[i] == operatorsTwo[0] || tempArray[i] == operatorsTwo[1])
+                {
+                    orderArray[j] = tempArray[i];
+                    tempArray[i] = nullPointer[0];
+                    j++;
+                }
+            }
+            for(i=special[x];i<special[x+1];i++)
+            {
+                if(tempArray[i] == operatorsThree[0] || tempArray[i] == operatorsThree[1])
+                {
+                    orderArray[j] = tempArray[i];
+                    tempArray[i] = nullPointer[0];
+                    j++;
+                }
+            }
         }
     }
-    for(i=0;i<strlen(alg);i++)
+    else
     {
-        if(alg[i] == operatorsThree[0] || alg[i] == operatorsThree[1])
+        for(i=0;i<strlen(alg);i++)
         {
-            orderArray[j] = alg[i];
-            j++;
+            if(alg[i] == operatorsOne[0])
+            {
+                orderArray[j] = alg[i];
+                j++;
+            }
+        }
+        for(i=0;i<strlen(alg);i++)
+        {
+            if(alg[i] == operatorsTwo[0] || alg[i] == operatorsTwo[1])
+            {
+                orderArray[j] = alg[i];
+                j++;
+            }
+        }
+        for(i=0;i<strlen(alg);i++)
+        {
+            if(alg[i] == operatorsThree[0] || alg[i] == operatorsThree[1])
+            {
+                orderArray[j] = alg[i];
+                j++;
+            }
         }
     }
     return orderArray;
