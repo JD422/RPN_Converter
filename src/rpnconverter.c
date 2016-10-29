@@ -44,13 +44,23 @@ int rpnconverter_autoselect(char *alg)
 char *rpnconverter_infix2rpn(char *alg)
 {
     //Initialize main variables
-    int i = 0, j = 0, span = 1;
+    int i = 0, j = 0, k = 0, span = 1;
     char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
     char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     char * infixOperators = rpnconverter_orderOfOperation(alg);
+    char * specialOperator = "()";
+    
+    for(i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] != specialOperator[0] && alg[i] != specialOperator[1])
+        {
+            infixAlg[k] = alg[i];
+            k++;
+        }
+    }
+    
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
-    strcpy(infixAlg, alg);
     strcpy(infixTemp, infixAlg);
     while(j<strlen(infixOperators))
     {
@@ -63,7 +73,7 @@ char *rpnconverter_infix2rpn(char *alg)
                 {
                         span++;
                 }
-                span = span + 1;
+                span = span + span - 2;
                 for(int l=0;l<span;l++)
                 {
                     infixAlg[i+l] = infixTemp[i+l+1];
