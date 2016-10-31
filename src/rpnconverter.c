@@ -102,67 +102,159 @@ char *rpnconverter_infix2rpn(char *alg)
             i = 0;
         }
     }
-    free(infixTemp);
-    free(infixOperators);
+    //free(infixTemp);
+    //free(infixOperators);
     return infixAlg;
 };
 
 char *rpnconverter_rpn2infix(char *alg)
 {
     //Initialize main variables
-    int i = 0, j = 0, span = 1;
-    char * rpnAlg = calloc(strlen(alg)+1,sizeof(char));
+    int i = 0, span = 1, p = 0, numOperators = 0, r=0, s=0, n=0;
+    char * rpnOperators = "^/*-+";
+    for(i=0;i<strlen(alg);i++)
+    {
+        for(int k=0;k<strlen(rpnOperators);k++)
+        {
+            if(alg[i] == rpnOperators[k])
+            {
+                numOperators++;
+            }
+        }
+    }
+    char * rpnAlg = calloc(((int)strlen(alg)+(numOperators*5)+1),sizeof(char));
     char * rpnTemp = calloc(strlen(alg)+1,sizeof(char));
-    char * rpnOperators = rpnconverter_orderOfOperation(alg);
+    char * brackets = "()";
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
     strcpy(rpnAlg, alg);
     strcpy(rpnTemp, rpnAlg);
-    while(j<strlen(rpnOperators))
+    for(i=0;i<strlen(rpnAlg);i++)
     {
-        if(rpnAlg[i] == rpnOperators[j])
+        for(int k=0;k<strlen(rpnOperators);k++)
         {
-            strcpy(rpnTemp, rpnAlg);
-            if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 1)
+            if(rpnAlg[i] == rpnOperators[k])
             {
-                while(rpnconverter_isValidOperator(rpnAlg[i-span*2]) == 1 && i-span > 0)
-                {
-                        span++;
-                }
-                span = span * 2 - 1;
-                for(int l=0;l<span;l++)
-                {
-                    rpnAlg[i-l] = rpnTemp[i-l-1];
-                }
-                rpnAlg[i-span] = rpnOperators[j];
-                i=i+span-1;
-            }
-            else
-            {
-                rpnAlg[i] = rpnTemp[i-1];
-                rpnAlg[i-1] = rpnTemp[i];
-                i++;
-            }
-            if((j) != strlen(rpnOperators))
-            {
-                span=1;
-                j++;
-            }
-        }
-        else
-        {
-            if(i<strlen(rpnAlg))
-            {
-                i++;
-            }
-            else
-            {
-                i=0;
+                strcpy(rpnTemp, rpnAlg);
+                    if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-1] == brackets[1])
+                    {
+                        span = 1;
+                        while(rpnconverter_isValidOperator(rpnAlg[i-span]) == 0 && rpnAlg[i-span] == brackets[1])
+                        {
+                            span++;
+                        }
+                        span--;
+                        r=span;
+                        while(span > 0)
+                        {
+                            r++;
+                            if(rpnAlg[i-r]==brackets[0])
+                            {
+                                span--;  
+                            }
+                            else if(span >= 1 && rpnAlg[i-r]==brackets[1])
+                            {
+                                span++;
+                            }
+                        }
+                        r++;
+                        if(rpnAlg[i-r] == brackets[1])
+                        {
+                            span++;
+                            while(span > 0)
+                            {
+                                s++;
+                                if(rpnAlg[i-r-s] == brackets[1])
+                                {
+                                    span++;
+                                }
+                                else if(rpnAlg[i-r-s] == brackets[0])
+                                {
+                                    span--;
+                                }
+                            }
+                            rpnAlg[i-r-s] = brackets[0];
+                            while(s>0)
+                            {
+                                rpnAlg[i-r-s+1] = rpnTemp[i-r-s];
+                                s--;
+                            }
+                        }
+                        else
+                        {
+                            rpnAlg[i-r] = brackets[0];
+                            
+                        }
+                            rpnAlg[i-r+1] = rpnTemp[i-r];
+                            r--;
+                            rpnAlg[i-r+1] = rpnTemp[i];
+                            while(r>0)
+                            {
+                                rpnAlg[i-r+2] = rpnTemp[i-r];
+                                r--;
+                            }
+                            rpnAlg[i+2] = brackets[1];
+                            p=0;
+                            for(int n = i+1;n<strlen(rpnTemp);n++)
+                            {
+                                p++;
+                                rpnAlg[i+2+p] = rpnTemp[n];
+                            }
+                            i+=2; 
+                    }
+                    else if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-2] != brackets[1])
+                    {
+                        rpnAlg[i-2] = brackets[0];
+                        rpnAlg[i-1] = rpnTemp[i-2];
+                        rpnAlg[i+1] = rpnTemp[i-1];
+                        rpnAlg[i+2] = brackets[1];
+                        p=0;
+                        for(int n = i+1;n<strlen(rpnTemp);n++)
+                        {
+                            p++;
+                            rpnAlg[i+2+p] = rpnTemp[n];
+                        }
+                        i+=2;
+                    }
+                    else
+                    {
+                        span = 2;
+                        while(rpnAlg[i-span] == brackets[1])
+                        {
+                            span++;
+                        }
+                        span-=2;
+                        r=span+1;
+                        while(span > 0)
+                        {
+                            r++;
+                            if(rpnAlg[i-r]==brackets[0])
+                            {
+                                span--;  
+                            }
+                            else if(span >= 1 && rpnAlg[i-r]==brackets[1])
+                            {
+                                span++;
+                            }
+                        }
+                        rpnAlg[i-r] = brackets[0];
+                        while(r>1)
+                        {
+                            rpnAlg[i-r+1] = rpnTemp[i-r];
+                            r--;
+                        }
+                        rpnAlg[i+1] = rpnTemp[i-1];
+                        rpnAlg[i+2] = brackets[1];
+                        p=0;
+                        for(n=i+1;n<strlen(rpnTemp);n++)
+                        {
+                            p++;
+                            rpnAlg[i+2+p] = rpnTemp[n];
+                        }
+                    }
             }
         }
     }
-    free(rpnTemp);
-    free(rpnOperators);
     return rpnAlg;
 };
 
