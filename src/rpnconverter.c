@@ -12,11 +12,20 @@ char *rpnconverter(char *alg)
         conAlg = rpnconverter_infix2rpn(alg);
         break;
     }
+    
+    if(conAlg == NULL)
+    {
+        perror("Algorithm has returned NULL");
+    }
     return conAlg;
 }
 
 int rpnconverter_autoselect(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Input Algorithm showing size of zero or less");
+    }
     //Initialize main variables
     const char * autoOperators = "^/*-+";
     int operandFound = 0;
@@ -43,12 +52,29 @@ int rpnconverter_autoselect(char *alg)
 
 char *rpnconverter_infix2rpn(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Input Algorithm showing size of zero or less");
+    }
     //Initialize main variables
     int i = 0, j = 0, k = 0, span = 1;
     char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
     char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     char * infixOperators = rpnconverter_orderOfOperation(alg);
     char * specialOperator = "()";
+    
+    if(sizeof(infixAlg) <= 0)
+    {
+        perror("Memory Allocation Failed");
+    }
+    else if(sizeof(infixTemp) <= 0)
+    {
+        perror("Memory Allocation Failed");
+    }
+    else if(sizeof(infixOperators) <= 0)
+    {
+        perror("No Operators Were Found");
+    }
     
     //Strip Parentheses from Algorithm
     for(i=0;i<strlen(alg);i++)
@@ -110,6 +136,10 @@ char *rpnconverter_infix2rpn(char *alg)
 
 char *rpnconverter_rpn2infix(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Input Algorithm showing size of zero or less");
+    }
     //Initialize main variables
     int i = 0, span = 1, p = 0, numOperators = 0, r=0, s=0, n=0;
     char * rpnOperators = "^/*-+";
@@ -128,6 +158,16 @@ char *rpnconverter_rpn2infix(char *alg)
     char * rpnAlg = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
     char * rpnTemp = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
     char * brackets = "()";
+    
+    if(sizeof(rpnAlg) <= 0)
+    {
+        perror("Memory Allocation Failed");
+    }
+    else if(sizeof(rpnTemp) <= 0)
+    {
+        perror("Memory Allocation Failed");
+    }
+    
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
     strcpy(rpnAlg, alg);
@@ -264,6 +304,10 @@ char *rpnconverter_rpn2infix(char *alg)
 
 char *rpnconverter_orderOfOperation(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Input Algorithm showing size of zero or less");
+    }
     //Initialize Variables
     int i, j = 0, l = 0, n = 0, o = 0, q = 0, skip = 0, temp1,temp2;
     char * nullPointer = "0";
@@ -285,6 +329,10 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
     }
     char *orderArray = calloc(l+1, sizeof(char));
+    if(sizeof(orderArray) <= 0)
+    {
+        perror("Memory Allocation Failed");
+    }
     //Check for Parentheses
     for(i=0;i<strlen(alg);i++)
     {
@@ -297,6 +345,10 @@ char *rpnconverter_orderOfOperation(char *alg)
     if(q > 0)
     {
         char * specialStart = calloc(q,sizeof(int));
+        if(sizeof(specialStart) <= 0)
+        {
+            perror("Memory Allocation Failed");
+        }
         o=0;
         for(i=0;i<strlen(alg);i++)
         {
@@ -308,6 +360,10 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
 
         char * special = calloc(q*2,sizeof(int));
+        if(sizeof(special) <= 0)
+        {
+            perror("Memory Allocation Failed");
+        }
         o=0;
         for(i=0;i<q;i++)
         {
@@ -347,6 +403,10 @@ char *rpnconverter_orderOfOperation(char *alg)
             }
         }
         char * tempArray = calloc(strlen(alg)+1,sizeof(char));
+        if(sizeof(tempArray) <= 0)
+        {
+            perror("Memory Allocation Failed");
+        }
         strcpy(tempArray,alg);
         for(int x=0;x<q*2;x+=2)
         {
