@@ -6,7 +6,7 @@ RPNConverter allows the conversion of Reverse Polish Notation(RPN) to and from I
 
 ## Why
 
-This project was created at the request of Pillar Technologies and is based off an online exercise found here: http://www.spoj.com/problems/ONP/. The ultimate goal of this project is to create a C library that can be used to convert an algorithm between Reverse Polish Notation and Infix Notation. This conversion must also be handle the use of parentheses which can have the effect of changing the order or operation for operators in Infix Notation.
+This project was created at the request of Pillar Technologies and is based off an online exercise found [here](http://www.spoj.com/problems/ONP/). The ultimate goal of this project is to create a C library that can be used to convert an algorithm between Reverse Polish Notation and Infix Notation. This conversion must also be handle the use of parentheses which can have the effect of changing the order or operation for operators in Infix Notation.
 
 ## How
 
@@ -34,7 +34,28 @@ include "{SRC_DIR}/rpnconverter.h"
 
 ## Assumptions
 
-It is assumed that 
+It is assumed that all returns for functions, excluding the Autoselect Function, will be stored in a variable that will be freed using the proper method upon completion of use. This will keep the library from causing a memory leak. As an example
+
+```c
+#include <stdio.h>
+include "{SRC_DIR}/rpnconverter.h"
+
+int main( ) {
+
+   char str[100];
+
+   printf( "Enter Algorithm: ");
+   scanf("%s", str);
+
+   char * alg = rpnconverter(str);
+    
+   printf( "\nConverted Algorithm: %s \n", alg);
+
+   free(alg);
+    
+   return 0;
+}
+```
 
 ## API Reference
 
@@ -53,23 +74,23 @@ rpnconverter("a+b"); //outputs "ab+"
 
 ## Low Level API Access
 
-Infix2RPN Function
+#### Infix2RPN Function
     This function takes a string with an algorithm written in Infix Notation and converts it directly to RPN.
 ```c
 rpnconverter_infix2rpn("a+b"); //outputs "ab+"
 ```
-RPN2Infix Function
+#### RPN2Infix Function
     This Function takes a string with an algorithm written in RPN and converts it directly to Infix Notation with Parentheses.
 ```c
 rpnconverter_rpn2infix("ab+"); //outputs "(a+b)"
 ```
-Autoselect Function
+#### Autoselect Function
     This function accepts a string with an algorithm in either RPN or Infix Notation and returns an identifier of 2 to represent that the inputted algorithm is in Infix Notation or 1 if the inputted algorithm is in RPN.
 ```c
 rpnconverter_autoselect("a+b"); //outputs 2 for infix
 rpnconverter_autoselect("ab+"); //outputs 1 for rpn
 ```
-OrderOfOperation Function
+#### OrderOfOperation Function
     This function accepts a string with an algorithm in Infix Notation and returns a string of the operators from the inputted string in the correct order of operation. This algorithm also automatically handles change of order of operation due to parentheses.
 ```c
 rpnconverter_orderOfOperation("(a*b^((c+d)/(e-f))^g)"); //outputs "+-/^^*"
