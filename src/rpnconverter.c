@@ -50,6 +50,7 @@ char *rpnconverter_infix2rpn(char *alg)
     char * infixOperators = rpnconverter_orderOfOperation(alg);
     char * specialOperator = "()";
     
+    //Strip Parentheses from Algorithm
     for(i=0;i<strlen(alg);i++)
     {
         if(alg[i] != specialOperator[0] && alg[i] != specialOperator[1])
@@ -102,8 +103,8 @@ char *rpnconverter_infix2rpn(char *alg)
             i = 0;
         }
     }
-    //free(infixTemp);
-    //free(infixOperators);
+    free(infixTemp);
+    free(infixOperators);
     return infixAlg;
 };
 
@@ -112,6 +113,7 @@ char *rpnconverter_rpn2infix(char *alg)
     //Initialize main variables
     int i = 0, span = 1, p = 0, numOperators = 0, r=0, s=0, n=0;
     char * rpnOperators = "^/*-+";
+    //Get number of Operators
     for(i=0;i<strlen(alg);i++)
     {
         for(int k=0;k<strlen(rpnOperators);k++)
@@ -122,8 +124,9 @@ char *rpnconverter_rpn2infix(char *alg)
             }
         }
     }
-    char * rpnAlg = calloc(((int)strlen(alg)+(numOperators*5)+1),sizeof(char));
-    char * rpnTemp = calloc(strlen(alg)+1,sizeof(char));
+    //Continue initializing variables
+    char * rpnAlg = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
+    char * rpnTemp = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
     char * brackets = "()";
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
@@ -255,11 +258,13 @@ char *rpnconverter_rpn2infix(char *alg)
             }
         }
     }
+    free(rpnTemp);
     return rpnAlg;
 };
 
 char *rpnconverter_orderOfOperation(char *alg)
 {
+    //Initialize Variables
     int i, j = 0, l = 0, n = 0, o = 0, q = 0, skip = 0, temp1,temp2;
     char * nullPointer = "0";
     char * specialOperator = "()";
@@ -268,6 +273,7 @@ char *rpnconverter_orderOfOperation(char *alg)
     char * operatorsTwo = "/*";
     char * operatorsThree = "-+";
     
+    //Get number of Operators to properly size orderArray
     for(i=0;i<strlen(alg);i++)
     {
         for(int k=0;k<strlen(operators);k++)
@@ -279,7 +285,7 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
     }
     char *orderArray = calloc(l+1, sizeof(char));
-    
+    //Check for Parentheses
     for(i=0;i<strlen(alg);i++)
     {
         if(alg[i] == specialOperator[0])
@@ -287,6 +293,7 @@ char *rpnconverter_orderOfOperation(char *alg)
             q++;
         }
     }
+    //If Parentheses found modify order of operation accordingly
     if(q > 0)
     {
         char * specialStart = calloc(q,sizeof(int));
@@ -339,7 +346,7 @@ char *rpnconverter_orderOfOperation(char *alg)
                 z = -2;
             }
         }
-        char * tempArray = calloc(strlen(alg),sizeof(char));
+        char * tempArray = calloc(strlen(alg)+1,sizeof(char));
         strcpy(tempArray,alg);
         for(int x=0;x<q*2;x+=2)
         {
@@ -371,7 +378,11 @@ char *rpnconverter_orderOfOperation(char *alg)
                 }
             }
         }
+        free(tempArray);
+        free(special);
+        free(specialStart);
     }
+    //If Parentheses not found then use standard order of operation
     else
     {
         for(i=0;i<strlen(alg);i++)
@@ -404,9 +415,10 @@ char *rpnconverter_orderOfOperation(char *alg)
 
 int rpnconverter_isValidOperator(char operator)
 {
+    //Initialize Variables
     int isOperator = 0;
     char * validOperators = "^/*-+";
-    
+    //Loop through valid operators to check if char is a valid operator
     for(int i=0;i<strlen(validOperators);i++)
     {
         if(validOperators[i] == operator)
