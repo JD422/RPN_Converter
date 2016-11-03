@@ -6,7 +6,7 @@ RPNConverter allows the conversion of Reverse Polish Notation(RPN) to and from I
 
 ## Why
 
-This project was created at the request of Pillar Technologies and is based off an online exercise found [here](http://www.spoj.com/problems/ONP/). The ultimate goal of this project is to create a C library that can be used to convert an algorithm between Reverse Polish Notation and Infix Notation. This conversion must also be able handle the use of parentheses which can have the effect of changing the order of operation for operators in Infix Notation.
+This project was created at the request of Pillar Technology and is based off an online exercise found [here](http://www.spoj.com/problems/ONP/). The ultimate goal of this project is to create a C library that can be used to convert an algorithm between Reverse Polish Notation and Infix Notation. This conversion must also be able handle the use of parentheses which can have the affect of changing the order of operation for operators in Infix Notation.
 
 ## How
 
@@ -29,7 +29,7 @@ To install this library
 * Paste into the folder where you are going to use the code
 * Add the following to your code where needed changing {SRC_DIR} to point to the folder containing rpnconverter.c and rpnconverter.h 
 ```c
-include "{SRC_DIR}/rpnconverter.h"
+#include "{SRC_DIR}/rpnconverter.h"
 ```
 
 ## Assumptions
@@ -38,7 +38,7 @@ It is assumed that all returns for functions, excluding the Autoselect Function,
 
 ```c
 #include <stdio.h>
-include "{SRC_DIR}/rpnconverter.h"
+#include "{SRC_DIR}/rpnconverter.h"
 
 int main( ) {
 
@@ -115,7 +115,7 @@ To clean up the directory
 make clean
 ```
 
-Valgrind was used to test for memory leaks using the command
+Valgrind was used to test for memory leaks using the following command
 ```c
 valgrind ./rpnconverter --leak-check=full
 ```

@@ -88,6 +88,7 @@ char *rpnconverter_infix2rpn(char *alg)
     
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
+    //Assuming that the required change isnt just simply swapping the operator and an operand find the correct span for displacement
     strcpy(infixTemp, infixAlg);
     while(j<strlen(infixOperators))
     {
@@ -170,6 +171,7 @@ char *rpnconverter_rpn2infix(char *alg)
     
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
+    //Assuming that the required change isnt just simply swapping the operator and an operand find the correct span for displacement
     strcpy(rpnAlg, alg);
     strcpy(rpnTemp, rpnAlg);
     for(i=0;i<strlen(rpnAlg);i++)
@@ -182,6 +184,7 @@ char *rpnconverter_rpn2infix(char *alg)
                     if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-1] == brackets[1])
                     {
                         span = 1;
+                        
                         while(rpnconverter_isValidOperator(rpnAlg[i-span]) == 0 && rpnAlg[i-span] == brackets[1])
                         {
                             span++;
