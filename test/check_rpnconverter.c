@@ -1,65 +1,100 @@
 #include <check.h>
 #include "../src/rpnconverter.h"
 
-START_TEST(whenRPNConverterMainFunctionIsPassedEitherRPNorInfixReturnConvertedAlg)
+START_TEST(whenRPNConverterMainFunctionIsPassedRPNReturnInfix)
 {   
-    char * testOne = rpnconverter("ab+");
-    ck_assert_str_eq(testOne, "(a+b)");
-    free(testOne);
-    char * testTwo = rpnconverter("a+b");
-    ck_assert_str_eq(testTwo, "ab+");
-    free(testTwo);
+    char * test = rpnconverter("ab+");
+    ck_assert_str_eq(test, "(a+b)");
+    free(test);
 }
 END_TEST
-START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixReturnItInRPN)
+START_TEST(whenRPNConverterMainFunctionIsPassedInfixReturnRPN)
 {   
-    char * testOne = rpnconverter_infix2rpn("a+b");
-    ck_assert_str_eq(testOne, "ab+");
-    free(testOne);
-    char * testTwo = rpnconverter_infix2rpn("a+b-c*d");
-    ck_assert_str_eq(testTwo, "ab+cd*-");
-    free(testTwo);
-    char * testThree = rpnconverter_infix2rpn("a/b+c^d+f");
-    ck_assert_str_eq(testThree, "ab/cd^+f+");
-    free(testThree);
-    char * testFour = rpnconverter_infix2rpn("(a*b^((c+d)/(e-f))^g)");
-    ck_assert_str_eq(testFour, "abcd+^*ef-/g^");
-    free(testFour);
+    char * test = rpnconverter("a+b");
+    ck_assert_str_eq(test, "ab+");
+    free(test);
 }
 END_TEST
-START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix)
+START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedBasicInfixReturnItInRPN)
 {   
-    char * testOne = rpnconverter_rpn2infix("ab+");
-    ck_assert_str_eq(testOne, "(a+b)");
-    free(testOne);
-    char * testTwo = rpnconverter_rpn2infix("ab+cd*-");
-    ck_assert_str_eq(testTwo, "((a+b)-(c*d))");
-    free(testTwo);
-    char * testThree = rpnconverter_rpn2infix("ab/cd^+f+");
-    ck_assert_str_eq(testThree, "(((a/b)+(c^d))+f)");
-    free(testThree);
-    char * testFour = rpnconverter_rpn2infix("ag+ba-c+cedf^*+^*");
-    ck_assert_str_eq(testFour, "((a+g)*(((b-a)+c)^(c+(e*(d^f)))))");
-    free(testFour);
+    char * test = rpnconverter_infix2rpn("a+b");
+    ck_assert_str_eq(test, "ab+");
+    free(test);
 }
 END_TEST
-START_TEST(whenRPNConverterAutoselectFunctionIsPassedAlgorithmReturnIdentifierForCorrectAlgorithm)
+START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixWithBasicOrderOfOperationChallengeReturnItInRPN)
+{   
+    char * test = rpnconverter_infix2rpn("a+b-c*d");
+    ck_assert_str_eq(test, "ab+cd*-");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixWithIntermediateOrderOfOperationChallengeReturnItInRPN)
+{   
+    char * test = rpnconverter_infix2rpn("a/b+c^d+f");
+    ck_assert_str_eq(test, "ab/cd^+f+");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixWithAdvancedOrderOfOperationChallengeReturnItInRPN)
+{   
+    char * test = rpnconverter_infix2rpn("(a*b^((c+d)/(e-f))^g)");
+    ck_assert_str_eq(test, "abcd+^*ef-/g^");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedBasicRPNReturnItInInfix)
+{   
+    char * test = rpnconverter_rpn2infix("ab+");
+    ck_assert_str_eq(test, "(a+b)");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperationChallengeReturnItInInfix)
+{   
+    char * test = rpnconverter_rpn2infix("ab+cd*-");
+    ck_assert_str_eq(test, "((a+b)-(c*d))");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix)
+{   
+    char * test = rpnconverter_rpn2infix("ab/cd^+f+");
+    ck_assert_str_eq(test, "(((a/b)+(c^d))+f)");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperationChallengeReturnItInInfix)
+{   
+    char * test = rpnconverter_rpn2infix("ag+ba-c+cedf^*+^*");
+    ck_assert_str_eq(test, "((a+g)*(((b-a)+c)^(c+(e*(d^f)))))");
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN)
 {   
     ck_assert_int_eq(rpnconverter_autoselect("ab+"), 1);
+}
+END_TEST
+START_TEST(whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix)
+{   
     ck_assert_int_eq(rpnconverter_autoselect("a+b"), 2);
 }
 END_TEST
-START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedAlgorithmReturnAllUsedOperatorsInProperOrder)
+START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithoutParenthesesReturnAllUsedOperatorsInProperOrder)
 {   
-    char * testOne = rpnconverter_orderOfOperation("a*b^c+d/e-f^g");
-    ck_assert_str_eq(testOne, "^^*/+-");
-    free(testOne);
-    char * testTwo = rpnconverter_orderOfOperation("(a*b^((c+d)/(e-f))^g)");
-    ck_assert_str_eq(testTwo, "+-/^^*");
-    free(testTwo);
+    char * test = rpnconverter_orderOfOperation("a*b^c+d/e-f^g");
+    ck_assert_str_eq(test, "^^*/+-");
+    free(test);
 }
 END_TEST
-
+START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithParenthesesReturnAllUsedOperatorsInProperOrder)
+{   
+    char * test = rpnconverter_orderOfOperation("(a*b^((c+d)/(e-f))^g)");
+    ck_assert_str_eq(test, "+-/^^*");
+    free(test);
+}
+END_TEST
     
 Suite * rpn_suite(void)
 {
@@ -70,11 +105,20 @@ Suite * rpn_suite(void)
     
     tc_core = tcase_create("Core");
     
-    tcase_add_test(tc_core, whenRPNConverterMainFunctionIsPassedEitherRPNorInfixReturnConvertedAlg);
-    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixReturnItInRPN);
-    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNReturnItInInfix);
-    tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedAlgorithmReturnIdentifierForCorrectAlgorithm);
-    tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedAlgorithmReturnAllUsedOperatorsInProperOrder);
+    tcase_add_test(tc_core, whenRPNConverterMainFunctionIsPassedRPNReturnInfix);
+    tcase_add_test(tc_core, whenRPNConverterMainFunctionIsPassedInfixReturnRPN);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedBasicInfixReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithBasicOrderOfOperationChallengeReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithIntermediateOrderOfOperationChallengeReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithAdvancedOrderOfOperationChallengeReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedBasicRPNReturnItInInfix);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperationChallengeReturnItInInfix);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithAdvancedOrderOfOperationChallengeReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN);
+    tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);
+    tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithoutParenthesesReturnAllUsedOperatorsInProperOrder);
+    tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithParenthesesReturnAllUsedOperatorsInProperOrder);
     suite_add_tcase(s, tc_core);
 
     return s;
