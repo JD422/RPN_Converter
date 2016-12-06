@@ -158,15 +158,6 @@ char *rpnconverter_rpn2infix(char *alg)
     char * rpnTemp = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
     char * brackets = "()";
     
-    if(sizeof(rpnAlg) <= 0)
-    {
-        perror("Memory Allocation Failed");
-    }
-    else if(sizeof(rpnTemp) <= 0)
-    {
-        perror("Memory Allocation Failed");
-    }
-    
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
     //Assuming that the required change isnt just simply swapping the operator and an operand find the correct span for displacement
@@ -333,10 +324,6 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
     }
     char *orderArray = calloc(l+1, sizeof(char));
-    if(sizeof(orderArray) <= 0)
-    {
-        perror("Memory Allocation Failed");
-    }
     //Check for Parentheses
     for(i=0;i<strlen(alg);i++)
     {
@@ -349,10 +336,6 @@ char *rpnconverter_orderOfOperation(char *alg)
     if(q > 0)
     {
         char * specialStart = calloc(q,sizeof(int));
-        if(sizeof(specialStart) <= 0)
-        {
-            perror("Memory Allocation Failed");
-        }
         o=0;
         for(i=0;i<strlen(alg);i++)
         {
@@ -364,10 +347,6 @@ char *rpnconverter_orderOfOperation(char *alg)
         }
 
         char * special = calloc(q*2,sizeof(int));
-        if(sizeof(special) <= 0)
-        {
-            perror("Memory Allocation Failed");
-        }
         o=0;
         for(i=0;i<q;i++)
         {
@@ -407,10 +386,6 @@ char *rpnconverter_orderOfOperation(char *alg)
             }
         }
         char * tempArray = calloc(strlen(alg)+1,sizeof(char));
-        if(sizeof(tempArray) <= 0)
-        {
-            perror("Memory Allocation Failed");
-        }
         strcpy(tempArray,alg);
         for(int x=0;x<q*2;x+=2)
         {
