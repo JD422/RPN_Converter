@@ -11,11 +11,15 @@ char *rpnconverter(char *alg)
         case 2 :
         conAlg = rpnconverter_infix2rpn(alg);
         break;
+        default :
+        break;
     }
     
+    char *error = calloc(30+1,sizeof(char));
     if(conAlg == NULL)
     {
-        perror("Algorithm has returned NULL");
+        strcpy(error, "Error: Algorithm is NULL");
+        return error;
     }
     return conAlg;
 }
