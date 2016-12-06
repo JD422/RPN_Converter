@@ -65,21 +65,10 @@ char *rpnconverter_infix2rpn(char *alg)
         return error;
     }
     //Initialize main variables
-    int i = 0, j = 0, k = 0, span = 1;
-    char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
-    char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
+    int i = 0, j = 0, span = 1;
+    char * infixAlg = rpnconverter_infix2rpn_strip(alg);
     char * infixOperators = rpnconverter_orderOfOperation(alg);
-    char * specialOperator = "()";
-    
-    //Strip Parentheses from Algorithm
-    for(i=0;i<strlen(alg);i++)
-    {
-        if(alg[i] != specialOperator[0] && alg[i] != specialOperator[1])
-        {
-            infixAlg[k] = alg[i];
-            k++;
-        }
-    }
+    char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     
     //Loop through all characters from the input string and check them against the operators array.
     //If an Operator is found then save the character in its corrected place in the infixAlg string.
@@ -128,6 +117,26 @@ char *rpnconverter_infix2rpn(char *alg)
     free(error);
     free(infixTemp);
     free(infixOperators);
+    return infixAlg;
+};
+
+char *rpnconverter_infix2rpn_strip(char *alg)
+{
+    //Initialize main variables
+    int i = 0, j = 0;
+    char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
+    char * specialOperator = "()";
+ 
+    //Remove parentheses from the algorithm
+    for(i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] != specialOperator[0] && alg[i] != specialOperator[1])
+        {
+            infixAlg[j] = alg[i];
+            j++;
+        }
+    }
+    
     return infixAlg;
 };
 
@@ -451,7 +460,7 @@ char *rpnconverter_orderOfOperation(char *alg)
     }
     free(error);
     return orderArray;
-}
+};
 
 int rpnconverter_isValidOperator(char operator)
 {
@@ -469,4 +478,4 @@ int rpnconverter_isValidOperator(char operator)
     }
     
     return isOperator;
-}
+};

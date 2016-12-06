@@ -43,6 +43,13 @@ START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedInfixWithAdvancedOrderOfOper
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterInfix2RPNStripFunctionIsPassedInfixWithParenthesesReturnInfixWithoutParentheses)
+{   
+    char * test = rpnconverter_infix2rpn_strip("(c+d)/(e-f)");
+    ck_assert_str_eq(test, "c+d/e-f");
+    free(test);
+}
+END_TEST
 START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedBasicRPNReturnItInInfix)
 {   
     char * test = rpnconverter_rpn2infix("ab+");
@@ -144,6 +151,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithBasicOrderOfOperationChallengeReturnItInRPN);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithIntermediateOrderOfOperationChallengeReturnItInRPN);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedInfixWithAdvancedOrderOfOperationChallengeReturnItInRPN);
+    tcase_add_test(tc_core, whenRPNConverterInfix2RPNStripFunctionIsPassedInfixWithParenthesesReturnInfixWithoutParentheses);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedBasicRPNReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix);
