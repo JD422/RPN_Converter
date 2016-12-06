@@ -21,6 +21,7 @@ char *rpnconverter(char *alg)
         strcpy(error, "Error: Algorithm is NULL");
         return error;
     }
+    free(error);
     return conAlg;
 }
 
@@ -124,6 +125,7 @@ char *rpnconverter_infix2rpn(char *alg)
             i = 0;
         }
     }
+    free(error);
     free(infixTemp);
     free(infixOperators);
     return infixAlg;
@@ -297,6 +299,7 @@ char *rpnconverter_rpn2infix(char *alg)
             }
         }
     }
+    free(error);
     free(rpnTemp);
     return rpnAlg;
 };
@@ -471,6 +474,7 @@ char *rpnconverter_orderOfOperation(char *alg)
             }
         }
     }
+    free(error);
     return orderArray;
 }
 
