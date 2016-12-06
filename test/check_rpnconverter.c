@@ -102,6 +102,13 @@ START_TEST(whenRPNConverterInfix2RPNFunctionIsPassedEmptyInputReturnError)
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedEmptyInputReturnError)
+{   
+    char * test = rpnconverter_rpn2infix("");
+    ck_assert_str_eq(test, "Error: Algorithm Size");
+    free(test);
+}
+END_TEST
     
 Suite * rpn_suite(void)
 {
@@ -127,6 +134,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithoutParenthesesReturnAllUsedOperatorsInProperOrder);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithParenthesesReturnAllUsedOperatorsInProperOrder);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedEmptyInputReturnError);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedEmptyInputReturnError);
     suite_add_tcase(s, tc_core);
 
     return s;
