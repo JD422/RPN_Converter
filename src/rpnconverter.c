@@ -172,26 +172,9 @@ char *rpnconverter_rpn2infix(char *alg)
                     if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-1] == brackets[1])
                     {
                         span = 1;
-                        
-                        while(rpnconverter_isValidOperator(rpnAlg[i-span]) == 0 && rpnAlg[i-span] == brackets[1])
-                        {
-                            span++;
-                        }
-                        span--;
-                        r=span;
-                        while(span > 0)
-                        {
-                            r++;
-                            if(rpnAlg[i-r]==brackets[0])
-                            {
-                                span--;  
-                            }
-                            else if(span >= 1 && rpnAlg[i-r]==brackets[1])
-                            {
-                                span++;
-                            }
-                        }
+                        r=rpnconverter_rpn2infix_span(i,span,rpnAlg);
                         r++;
+                        span = 0;
                         if(rpnAlg[i-r] == brackets[1])
                         {
                             span++;
@@ -219,22 +202,15 @@ char *rpnconverter_rpn2infix(char *alg)
                             rpnAlg[i-r] = brackets[0];
                             
                         }
-                            rpnAlg[i-r+1] = rpnTemp[i-r];
+                        rpnAlg[i-r+1] = rpnTemp[i-r];
+                        r--;
+                        rpnAlg[i-r+1] = rpnTemp[i];
+                        while(r>0)
+                        {
+                            rpnAlg[i-r+2] = rpnTemp[i-r];
                             r--;
-                            rpnAlg[i-r+1] = rpnTemp[i];
-                            while(r>0)
-                            {
-                                rpnAlg[i-r+2] = rpnTemp[i-r];
-                                r--;
-                            }
-                            rpnAlg[i+2] = brackets[1];
-                            p=0;
-                            for(int n = i+1;n<strlen(rpnTemp);n++)
-                            {
-                                p++;
-                                rpnAlg[i+2+p] = rpnTemp[n];
-                            }
-                            i+=2; 
+                        }
+                        rpnAlg[i+2] = brackets[1];
                     }
                     else if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-2] != brackets[1])
                     {
@@ -242,35 +218,12 @@ char *rpnconverter_rpn2infix(char *alg)
                         rpnAlg[i-1] = rpnTemp[i-2];
                         rpnAlg[i+1] = rpnTemp[i-1];
                         rpnAlg[i+2] = brackets[1];
-                        p=0;
-                        for(int n = i+1;n<strlen(rpnTemp);n++)
-                        {
-                            p++;
-                            rpnAlg[i+2+p] = rpnTemp[n];
-                        }
-                        i+=2;
+                        
                     }
                     else
                     {
                         span = 2;
-                        while(rpnAlg[i-span] == brackets[1])
-                        {
-                            span++;
-                        }
-                        span-=2;
-                        r=span+1;
-                        while(span > 0)
-                        {
-                            r++;
-                            if(rpnAlg[i-r]==brackets[0])
-                            {
-                                span--;  
-                            }
-                            else if(span >= 1 && rpnAlg[i-r]==brackets[1])
-                            {
-                                span++;
-                            }
-                        }
+                        r = rpnconverter_rpn2infix_span(i,span,rpnAlg);
                         rpnAlg[i-r] = brackets[0];
                         while(r>1)
                         {
@@ -279,19 +232,48 @@ char *rpnconverter_rpn2infix(char *alg)
                         }
                         rpnAlg[i+1] = rpnTemp[i-1];
                         rpnAlg[i+2] = brackets[1];
+                    }
                         p=0;
-                        for(n=i+1;n<strlen(rpnTemp);n++)
+                        for(n = i+1;n<strlen(rpnTemp);n++)
                         {
                             p++;
                             rpnAlg[i+2+p] = rpnTemp[n];
                         }
-                    }
+                        i+=2;
             }
         }
     }
     free(error);
     free(rpnTemp);
     return rpnAlg;
+};
+
+int rpnconverter_rpn2infix_span(int i, int span, char *rpn)
+{
+    //Initialize main variables
+    int j=0,k=span;
+    char * brackets = "()";
+    //Calculate the span between chosen brackets
+    while(rpnconverter_isValidOperator(rpn[i-span]) == 0 && rpn[i-span] == brackets[1])
+    {
+        span++;
+    }
+    span-=k;
+    j=span+k-1;
+    while(span > 0)
+    {
+        j++;
+        if(rpn[i-j]==brackets[0])
+        {
+            span--;  
+        }
+        else if(span >= 1 && rpn[i-j]==brackets[1])
+        {
+            span++;
+        }
+    }
+
+    return j;
 };
 
 int rpnconverter_rpn2infix_countoperators(char *alg)
