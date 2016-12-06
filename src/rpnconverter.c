@@ -298,9 +298,11 @@ char *rpnconverter_rpn2infix(char *alg)
 
 char *rpnconverter_orderOfOperation(char *alg)
 {
+    char *error = calloc(30+1,sizeof(char));
     if(strlen(alg) <= 0)
     {
-        perror("Input Algorithm showing size of zero or less");
+        strcpy(error, "Error: Algorithm Size");
+        return error;
     }
     //Initialize Variables
     int i, j = 0, l = 0, n = 0, o = 0, q = 0, skip = 0, temp1,temp2;
