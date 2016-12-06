@@ -78,6 +78,11 @@ START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperat
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators)
+{   
+    ck_assert_int_eq(rpnconverter_rpn2infix_countoperators("ab+cd*-"), 3);
+}
+END_TEST
 START_TEST(whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN)
 {   
     ck_assert_int_eq(rpnconverter_autoselect("ab+"), 1);
@@ -156,6 +161,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperationChallengeReturnItInInfix);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithoutParenthesesReturnAllUsedOperatorsInProperOrder);

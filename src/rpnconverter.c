@@ -149,19 +149,9 @@ char *rpnconverter_rpn2infix(char *alg)
         return error;
     }
     //Initialize main variables
-    int i = 0, span = 1, p = 0, numOperators = 0, r=0, s=0, n=0;
+    int i = 0, span = 1, p = 0, r=0, s=0, n=0;
+    int numOperators = rpnconverter_rpn2infix_countoperators(alg);
     char * rpnOperators = "^/*-+";
-    //Get number of Operators
-    for(i=0;i<strlen(alg);i++)
-    {
-        for(int k=0;k<strlen(rpnOperators);k++)
-        {
-            if(alg[i] == rpnOperators[k])
-            {
-                numOperators++;
-            }
-        }
-    }
     //Continue initializing variables
     char * rpnAlg = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
     char * rpnTemp = calloc(((int)strlen(alg)+(numOperators*2)+1),sizeof(char));
@@ -302,6 +292,25 @@ char *rpnconverter_rpn2infix(char *alg)
     free(error);
     free(rpnTemp);
     return rpnAlg;
+};
+
+int rpnconverter_rpn2infix_countoperators(char *alg)
+{
+    //Initialize main variables
+    int i = 0, j = 0, countOperators = 0;
+    char * rpnOperators = "^/*-+";
+    //Get number of Operators
+    for(i=0;i<strlen(alg);i++)
+    {
+        for(j=0;j<strlen(rpnOperators);j++)
+        {
+            if(alg[i] == rpnOperators[j])
+            {
+                countOperators++;
+            }
+        }
+    }
+    return countOperators;
 };
 
 char *rpnconverter_orderOfOperation(char *alg)
