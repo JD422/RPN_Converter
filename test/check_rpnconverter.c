@@ -116,6 +116,11 @@ START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedEmptyInputReturnError
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterAutoselectFunctionIsPassedEmptyInputReturnError)
+{   
+    ck_assert_int_eq(rpnconverter_autoselect(""), 0);
+}
+END_TEST
     
 Suite * rpn_suite(void)
 {
@@ -143,6 +148,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedEmptyInputReturnError);
+    tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedEmptyInputReturnError);
     suite_add_tcase(s, tc_core);
 
     return s;

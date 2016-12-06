@@ -24,7 +24,8 @@ int rpnconverter_autoselect(char *alg)
 {
     if(strlen(alg) <= 0)
     {
-        perror("Input Algorithm showing size of zero or less");
+        perror("Error: Algorithm Size");
+        return 0;
     }
     //Initialize main variables
     const char * autoOperators = "^/*-+";
