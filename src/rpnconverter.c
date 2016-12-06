@@ -52,9 +52,11 @@ int rpnconverter_autoselect(char *alg)
 
 char *rpnconverter_infix2rpn(char *alg)
 {
+    char *error = calloc(30+1,sizeof(char));
     if(strlen(alg) <= 0)
     {
-        perror("Input Algorithm showing size of zero or less");
+        strcpy(error, "Error: Algorithm Size");
+        return error;
     }
     //Initialize main variables
     int i = 0, j = 0, k = 0, span = 1;
@@ -62,19 +64,6 @@ char *rpnconverter_infix2rpn(char *alg)
     char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     char * infixOperators = rpnconverter_orderOfOperation(alg);
     char * specialOperator = "()";
-    
-    if(sizeof(infixAlg) <= 0)
-    {
-        perror("Memory Allocation Failed");
-    }
-    else if(sizeof(infixTemp) <= 0)
-    {
-        perror("Memory Allocation Failed");
-    }
-    else if(sizeof(infixOperators) <= 0)
-    {
-        perror("No Operators Were Found");
-    }
     
     //Strip Parentheses from Algorithm
     for(i=0;i<strlen(alg);i++)
