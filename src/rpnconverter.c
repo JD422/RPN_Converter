@@ -246,6 +246,39 @@ char *rpnconverter_rpn2infix(char *alg)
     return rpnAlg;
 };
 
+char *rpnconverter_rpn2infix_getoperators(char *alg)
+{
+    int j=0;
+    int numOperators = rpnconverter_rpn2infix_countoperators(alg);
+    char * rpnAlg = calloc(numOperators+1,sizeof(char));
+    
+    for(int i=0;i<strlen(alg);i++){
+        switch(alg[i]) {
+          case '^' :
+             rpnAlg[j] = '^';
+             j++;
+             break;
+          case '/' :
+             rpnAlg[j] = '/';
+             j++;
+          case '*' :
+             rpnAlg[j] = '*';
+             j++;
+             break;
+          case '-' :
+             rpnAlg[j] = '-';
+             j++;
+             break;
+          case '+' :
+             rpnAlg[j] = '+';
+             j++;
+             break;
+       }
+    }
+    
+    return rpnAlg;
+};
+
 int rpnconverter_rpn2infix_span(int i, int span, char *rpn)
 {
     //Initialize main variables

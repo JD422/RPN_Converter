@@ -66,16 +66,23 @@ START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperation
 END_TEST
 START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix)
 {   
-    /*char * test = rpnconverter_rpn2infix("ab/cd^+f+");
+    char * test = rpnconverter_rpn2infix("ab/cd^+f+");
     ck_assert_str_eq(test, "(((a/b)+(c^d))+f)");
-    free(test);*/
+    free(test);
 }
 END_TEST
 START_TEST(whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperationChallengeReturnItInInfix)
 {   
-    /*char * test = rpnconverter_rpn2infix("ag+ba-c+cedf^*+^*");
+    char * test = rpnconverter_rpn2infix("ag+ba-c+cedf^*+^*");
     ck_assert_str_eq(test, "((a+g)*(((b-a)+c)^(c+(e*(d^f)))))");
-    free(test);*/
+    free(test);
+}
+END_TEST
+START_TEST(whenRPNConverterRPN2InfixGetOperatorsFunctionIsPassedRPNReturnOperatorsInCorrectOrder)
+{   
+    char * test = rpnconverter_rpn2infix_getoperators("ag+ba-c+cedf^*+^*");
+    ck_assert_str_eq(test, "+-+^*+^*");
+    free(test);
 }
 END_TEST
 START_TEST(whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators)
@@ -166,6 +173,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithBasicOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperationChallengeReturnItInInfix);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixGetOperatorsFunctionIsPassedRPNReturnOperatorsInCorrectOrder);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixSpanFunctionIsPassedSpanAndRPNReturnSpan);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN);
