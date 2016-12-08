@@ -67,7 +67,7 @@ char *rpnconverter_infix2rpn(char *alg)
     //Initialize main variables
     int i = 0, j = 0, span = 1;
     char * infixAlg = rpnconverter_infix2rpn_strip(alg);
-    char * infixOperators = rpnconverter_orderOfOperation(alg);
+    char * infixOperators = rpnconverter_infix2rpn_getOperatorArray(alg);
     char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     
     //Loop through all characters from the input string and check them against the operators array.
@@ -124,8 +124,8 @@ char *rpnconverter_infix2rpn_strip(char *alg)
 {
     //Initialize main variables
     int i = 0, j = 0;
-    char * infixAlg = calloc(strlen(alg)+1,sizeof(char));
-    char * specialOperator = "()";
+    char *infixAlg = calloc(strlen(alg)+1,sizeof(char));
+    char *specialOperator = "()";
  
     //Remove parentheses from the algorithm
     for(i=0;i<strlen(alg);i++)
@@ -242,6 +242,7 @@ char *rpnconverter_rpn2infix(char *alg)
     }
     free(error);
     free(rpnTemp);
+    free(rpnOperators);
     return rpnAlg;
 };
 
@@ -335,7 +336,7 @@ int rpnconverter_rpn2infix_countoperators(char *alg)
     return countOperators;
 };
 
-char *rpnconverter_orderOfOperation(char *alg)
+char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
 {
     char *error = calloc(30+1,sizeof(char));
     if(strlen(alg) <= 0)
@@ -344,150 +345,118 @@ char *rpnconverter_orderOfOperation(char *alg)
         return error;
     }
     //Initialize Variables
-    int i, j = 0, l = 0, n = 0, o = 0, q = 0, skip = 0, temp1,temp2;
-    char * nullPointer = "0";
-    char * specialOperator = "()";
-    char * operators = "^/*-+";
-    char * operatorsOne = "^";
-    char * operatorsTwo = "/*";
-    char * operatorsThree = "-+";
-    
-    //Get number of Operators to properly size orderArray
-    for(i=0;i<strlen(alg);i++)
+    int i = 0, j = 0, k = 0, countSpan = 0, skipParentheses = 0, loop = 0;
+    int countParentheses = rpnconverter_infix2rpn_orderOfOperation_checkParentheses(alg);
+    int numOperators = rpnconverter_rpn2infix_countoperators(alg);
+    char *operatorArray = calloc(numOperators+1,sizeof(char));
+    char *parentheses = "()";
+    //If Algorithm Has No Parentheses Then Send Algorithm Directly To OrderOfOperation Function
+    //If Algorithm Does Have Parentheses Then Parse Out Sub Algorithms Delimited By Parentheses And Perform OrderOfOperation Function On Each Sub Algorithm Then Combine Returned Operators Respecting OrderOfOperation Changes Caused By The Parentheses
+    if(countParentheses == 0)
     {
-        for(int k=0;k<strlen(operators);k++)
-        {
-            if(alg[i] == operators[k])
-            {
-                l++;
-            }
-        }
+        operatorArray = rpnconverter_infix2rpn_orderOfOperation(0,strlen(alg),alg);
     }
-    char *orderArray = calloc(l+1, sizeof(char));
-    //Check for Parentheses
-    q = rpnconverter_orderOfOperation_checkParentheses(alg);
-    //If Parentheses found modify order of operation accordingly
-    if(q > 0)
-    {
-        char * specialStart = calloc(q,sizeof(int));
-        o=0;
-        for(i=0;i<strlen(alg);i++)
-        {
-            if(alg[i] == specialOperator[0])
-            {
-                specialStart[o] = i;
-                o++;
-            }
-        }
-
-        char * special = calloc(q*2,sizeof(int));
-        o=0;
-        for(i=0;i<q;i++)
-        {
-            special[o] = specialStart[i];
-            o++;
-            n = specialStart[i]+1;
-            while(n<strlen(alg))
-            {
-                if(alg[n] == specialOperator[0])
-                {
-                    skip++;
-                }
-                else if(alg[n] == specialOperator[1] && skip != 0)
-                {
-                    skip--;
-                }
-                else if(alg[n] == specialOperator[1] && skip == 0)
-                {
-                    special[o] = n;
-                    o++;
-                    break;
-                }
-                n++;
-            }
-        }
-        for(int z=0;z<q*2;z+=2)
-        {
-            if(special[z] < special[z+2] && special[z+1] > special[z+3])
-            {
-                temp1 = special[z];
-                temp2 = special[z+1];
-                special[z] = special[z+2];
-                special[z+1] = special[z+3];
-                special[z+2] = temp1;
-                special[z+3] = temp2;
-                z = -2;
-            }
-        }
-        char * tempArray = calloc(strlen(alg)+1,sizeof(char));
-        strcpy(tempArray,alg);
-        for(int x=0;x<q*2;x+=2)
-        {
-            for(i=special[x];i<special[x+1];i++)
-            {
-                if(tempArray[i] == operatorsOne[0])
-                {
-                    orderArray[j] = tempArray[i];
-                    tempArray[i] = nullPointer[0];
-                    j++;
-                }
-            }
-            for(i=special[x];i<special[x+1];i++)
-            {
-                if(tempArray[i] == operatorsTwo[0] || tempArray[i] == operatorsTwo[1])
-                {
-                    orderArray[j] = tempArray[i];
-                    tempArray[i] = nullPointer[0];
-                    j++;
-                }
-            }
-            for(i=special[x];i<special[x+1];i++)
-            {
-                if(tempArray[i] == operatorsThree[0] || tempArray[i] == operatorsThree[1])
-                {
-                    orderArray[j] = tempArray[i];
-                    tempArray[i] = nullPointer[0];
-                    j++;
-                }
-            }
-        }
-        free(tempArray);
-        free(special);
-        free(specialStart);
-    }
-    //If Parentheses not found then use standard order of operation
     else
     {
-        for(i=0;i<strlen(alg);i++)
+        while(i<strlen(alg))
         {
-            if(alg[i] == operatorsOne[0])
+            if(alg[i] == parentheses[1])
             {
-                orderArray[j] = alg[i];
-                j++;
+                while(loop == 0)
+                {
+                    if(alg[i-countSpan] == parentheses[1])
+                    {
+                        skipParentheses++;
+                    }
+                    if(skipParentheses > 0 && alg[i-countSpan] == parentheses[0])
+                    {
+                        skipParentheses--;
+                    }
+                    countSpan++;
+                    if(skipParentheses == 0)
+                    {
+                        countSpan--;
+                        loop = 1;
+                    }
+                }
+                loop = 0;
+                char *tempArray = rpnconverter_infix2rpn_orderOfOperation(i-countSpan+1,countSpan,alg);
+                countSpan = 0;
+                j=0;
+                while(j<strlen(tempArray))
+                {
+                    operatorArray[k] = tempArray[j];
+                    k++;
+                    j++;
+                }
+                free(tempArray);
             }
-        }
-        for(i=0;i<strlen(alg);i++)
-        {
-            if(alg[i] == operatorsTwo[0] || alg[i] == operatorsTwo[1])
-            {
-                orderArray[j] = alg[i];
-                j++;
-            }
-        }
-        for(i=0;i<strlen(alg);i++)
-        {
-            if(alg[i] == operatorsThree[0] || alg[i] == operatorsThree[1])
-            {
-                orderArray[j] = alg[i];
-                j++;
-            }
+            i++;
         }
     }
     free(error);
+    return operatorArray;
+};
+
+char *rpnconverter_infix2rpn_orderOfOperation(int start, int span, char *alg)
+{
+    //Initialize Variables
+    int i = 0, j = 0, nestFound = 0;
+    int phase = 1;
+    char *parentheses = "()";
+    char *operatorsOne = "^";
+    char *operatorsTwo = "/*";
+    char *operatorsThree = "-+";
+    char *orderArray = calloc(span/2+1,sizeof(char));
+    
+    //Loop Through Given Span And Return Operators With Respect To Order Of Operation
+    //If Given Span Has Nested Parentheses Skip Over Them
+    while(i<span && phase<4)
+    {
+        if(alg[start+i] == parentheses[0])
+        {
+            nestFound++;
+        }
+        else if(nestFound > 0 && alg[start+i] == parentheses[1])
+        {
+            nestFound--;
+        }
+        else if(phase == 1 && nestFound == 0)
+        {
+            if(alg[start+i] == operatorsOne[0])
+            {
+                orderArray[j] = alg[start+i];
+                j++;
+            }
+        }
+        else if(phase == 2 && nestFound == 0)
+        {
+            if(alg[start+i] == operatorsTwo[0] || alg[start+i] == operatorsTwo[1])
+            {
+                orderArray[j] = alg[start+i];
+                j++;
+            }
+        }
+        else if(phase == 3 && nestFound == 0)
+        {
+            if(alg[start+i] == operatorsThree[0] || alg[start+i] == operatorsThree[1])
+            {
+                orderArray[j] = alg[start+i];
+                j++;
+            }
+        }
+        i++;
+        if(i == span && phase < 4)
+        {
+            i = 0;
+            phase++;
+        }
+    }
+    
     return orderArray;
 };
 
-int rpnconverter_orderOfOperation_checkParentheses(char *alg)
+int rpnconverter_infix2rpn_orderOfOperation_checkParentheses(char *alg)
 {
     int check = 0;
     char *specialOperator = "()";
