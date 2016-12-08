@@ -365,13 +365,7 @@ char *rpnconverter_orderOfOperation(char *alg)
     }
     char *orderArray = calloc(l+1, sizeof(char));
     //Check for Parentheses
-    for(i=0;i<strlen(alg);i++)
-    {
-        if(alg[i] == specialOperator[0])
-        {
-            q++;
-        }
-    }
+    q = rpnconverter_orderOfOperation_checkParentheses(alg);
     //If Parentheses found modify order of operation accordingly
     if(q > 0)
     {
@@ -491,6 +485,20 @@ char *rpnconverter_orderOfOperation(char *alg)
     }
     free(error);
     return orderArray;
+};
+
+int rpnconverter_orderOfOperation_checkParentheses(char *alg)
+{
+    int check = 0;
+    char *specialOperator = "()";
+    for(int i=0;i<strlen(alg);i++)
+    {
+        if(alg[i] == specialOperator[0])
+        {
+            check++;
+        }
+    }
+    return check;
 };
 
 int rpnconverter_isValidOperator(char operator)

@@ -140,6 +140,11 @@ START_TEST(whenRPNConverterOrderOfOperationFunctionIsPassedEmptyInputReturnError
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterOrderOfOperationCheckParenthesesFunctionIsPassedInfixWithParenthesesReturnNumberOfOpenParentheses)
+{   
+    ck_assert_int_eq(rpnconverter_orderOfOperation_checkParentheses("(a*b^((c+d)/(e-f))^g)"), 4);
+}
+END_TEST
 START_TEST(whenRPNConverterAutoselectFunctionIsPassedEmptyInputReturnError)
 {   
     ck_assert_int_eq(rpnconverter_autoselect(""), 0);
@@ -180,6 +185,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithoutParenthesesReturnAllUsedOperatorsInProperOrder);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedInfixWithParenthesesReturnAllUsedOperatorsInProperOrder);
+    tcase_add_test(tc_core, whenRPNConverterOrderOfOperationCheckParenthesesFunctionIsPassedInfixWithParenthesesReturnNumberOfOpenParentheses);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterOrderOfOperationFunctionIsPassedEmptyInputReturnError);

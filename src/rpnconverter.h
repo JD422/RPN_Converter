@@ -13,6 +13,7 @@ char *rpnconverter_rpn2infix_getoperators(char *alg);
 int rpnconverter_rpn2infix_countoperators(char *alg);
 int rpnconverter_rpn2infix_span(int i, int span, char *rpnAlg);
 char *rpnconverter_orderOfOperation(char *alg);
+int rpnconverter_orderOfOperation_checkParentheses(char *alg);
 int rpnconverter_autoselect(char *alg);
 int rpnconverter_isValidOperator(char operator);
 
