@@ -85,9 +85,9 @@ START_TEST(whenRPNConverterRPN2InfixGetOperatorsFunctionIsPassedRPNReturnOperato
     free(test);
 }
 END_TEST
-START_TEST(whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators)
+START_TEST(whenRPNConverterCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators)
 {   
-    ck_assert_int_eq(rpnconverter_rpn2infix_countoperators("ab+cd*-"), 3);
+    ck_assert_int_eq(rpnconverter_countoperators("ab+cd*-"), 3);
 }
 END_TEST
 START_TEST(whenRPNConverterRPN2InfixSpanFunctionIsPassedSpanAndRPNReturnSpan)
@@ -160,7 +160,7 @@ END_TEST
 START_TEST(whenRPNConverterMainFunctionIsPassedEmptyInputReturnError)
 {   
     char * test = rpnconverter("");
-    ck_assert_str_eq(test, "Error: Algorithm is NULL");
+    ck_assert_str_eq(test, "Error: Algorithm Size");
     free(test);
 }
 END_TEST
@@ -186,7 +186,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithIntermediateOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixFunctionIsPassedRPNWithAdvancedOrderOfOperationChallengeReturnItInInfix);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixGetOperatorsFunctionIsPassedRPNReturnOperatorsInCorrectOrder);
-    tcase_add_test(tc_core, whenRPNConverterRPN2InfixCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators);
+    tcase_add_test(tc_core, whenRPNConverterCountOperatorsFunctionIsPassedRPNReturnNumberOfOperators);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixSpanFunctionIsPassedSpanAndRPNReturnSpan);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedRPNReturnIdentifierForRPN);
     tcase_add_test(tc_core, whenRPNConverterAutoselectFunctionIsPassedInfixReturnIdentifierForInfix);
