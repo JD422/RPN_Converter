@@ -405,6 +405,12 @@ char *rpnconverter_infix2rpn_getoperatorarray(char *alg)
 
 char *rpnconverter_infix2rpn_orderofoperation(int start, int span, char *alg)
 {
+    char *error = calloc(30+1,sizeof(char));
+    if(strlen(alg) <= 0)
+    {
+        strcpy(error, "Error: Algorithm Size");
+        return error;
+    }
     //Initialize Variables
     int i = 0, j = 0, nestFound = 0;
     int phase = 1;
@@ -457,7 +463,7 @@ char *rpnconverter_infix2rpn_orderofoperation(int start, int span, char *alg)
             phase++;
         }
     }
-    
+    free(error);
     return orderArray;
 };
 
