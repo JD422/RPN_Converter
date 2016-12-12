@@ -124,6 +124,12 @@ char *rpnconverter_infix2rpn(char *alg)
 
 char *rpnconverter_infix2rpn_strip(char *alg)
 {
+    char *error = calloc(30+1,sizeof(char));
+    if(strlen(alg) <= 0)
+    {
+        strcpy(error, "Error: Algorithm Size");
+        return error;
+    }
     //Initialize main variables
     int i = 0, j = 0;
     char *infixAlg = calloc(strlen(alg)+1,sizeof(char));
@@ -138,7 +144,7 @@ char *rpnconverter_infix2rpn_strip(char *alg)
             j++;
         }
     }
-    
+    free(error);
     return infixAlg;
 };
 
