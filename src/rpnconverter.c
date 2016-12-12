@@ -330,6 +330,11 @@ int rpnconverter_rpn2infix_span(int i, int span, char *rpn)
 
 int rpnconverter_countoperators(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Error: Algorithm Size");
+        return 0;
+    }
     //Initialize Variables
     int i = 0, countOperators = 0;
     //Get Number of Operators
