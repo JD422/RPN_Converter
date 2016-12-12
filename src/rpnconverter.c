@@ -250,6 +250,12 @@ char *rpnconverter_rpn2infix(char *alg)
 
 char *rpnconverter_rpn2infix_getoperators(char *alg)
 {
+    char *error = calloc(30+1,sizeof(char));
+    if(strlen(alg) <= 0)
+    {
+        strcpy(error, "Error: Algorithm Size");
+        return error;
+    }
     //Initialize Variables
     int j=0;
     int numOperators = rpnconverter_countoperators(alg);
@@ -279,7 +285,7 @@ char *rpnconverter_rpn2infix_getoperators(char *alg)
              break;
        }
     }
-    
+    free(error);
     return rpnAlg;
 };
 
