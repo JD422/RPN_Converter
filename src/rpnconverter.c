@@ -297,6 +297,11 @@ char *rpnconverter_rpn2infix_getoperators(char *alg)
 
 int rpnconverter_rpn2infix_span(int i, int span, char *rpn)
 {
+    if(strlen(rpn) <= 0)
+    {
+        perror("Error: Algorithm Size");
+        return 0;
+    }
     //Initialize main variables
     int j=0,k=span;
     char * brackets = "()";

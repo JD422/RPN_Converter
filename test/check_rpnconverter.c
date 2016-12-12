@@ -195,6 +195,11 @@ START_TEST(whenRPNConverterInfix2RPNStripFunctionIsPassedEmptyInputReturnError)
     free(test);
 }
 END_TEST
+START_TEST(whenRPNConverterRPN2InfixSpanFunctionIsPassedEmptyInputReturnError)
+{   
+    ck_assert_int_eq(rpnconverter_rpn2infix_span(0,0,""), 0);
+}
+END_TEST
 
 Suite * rpn_suite(void)
 {
@@ -235,6 +240,7 @@ Suite * rpn_suite(void)
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNOrderOfOperationFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterRPN2InfixGetOperatorsFunctionIsPassedEmptyInputReturnError);
     tcase_add_test(tc_core, whenRPNConverterInfix2RPNStripFunctionIsPassedEmptyInputReturnError);
+    tcase_add_test(tc_core, whenRPNConverterRPN2InfixSpanFunctionIsPassedEmptyInputReturnError);
     suite_add_tcase(s, tc_core);
 
     return s;
