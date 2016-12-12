@@ -34,7 +34,7 @@ To install this library
 
 ## Assumptions
 
-It is assumed that all returns for functions, excluding the Autoselect Function, will be stored in a variable that will be freed using the proper method upon completion of use. This will keep the library from causing a memory leak. As an example
+It is assumed that all returns that are character pointers will be freed using the proper method upon completion of use. This will keep the library from causing a memory leak. As an example
 
 ```c
 #include <stdio.h>
@@ -85,7 +85,7 @@ This function takes a string with an algorithm written in Infix Notation and str
 rpnconverter_infix2rpn_strip("(c+d)/(e-f)"); //outputs "c+d/e-f"
 ```
 #### Infix2RPN_GetOperatorArray Function
-This function takes a string with an algorithm written in Infix Notation and returns an array of all the operators used while adjusting for the order of operation while handling changes due to parentheses.
+This function takes a string with an algorithm written in Infix Notation and returns an array of all the operators used while adjusting for the order of operation and handling changes due to parentheses.
 ```c
 rpnconverter_infix2rpn_getoperatorarray("(a*b^((c+d)/(e-f))^g)"); //outputs "+-/^^*"
 ```
