@@ -378,7 +378,7 @@ char *rpnconverter_infix2rpn_getoperatorarray(char *alg)
     char *parentheses = "()";
     //If Algorithm Has No Parentheses Then Send Algorithm Directly To OrderOfOperation Function
     //If Algorithm Does Have Parentheses Then Parse Out Sub Algorithms Delimited By Parentheses And Perform OrderOfOperation Function On Each Sub Algorithm Then Combine Returned Operators Respecting OrderOfOperation Changes Caused By The Parentheses
-    if(countParentheses == 0)
+    if(countParentheses == 1)
     {
         operatorArray = rpnconverter_infix2rpn_orderofoperation(0,strlen(alg),alg);
     }
@@ -491,8 +491,13 @@ char *rpnconverter_infix2rpn_orderofoperation(int start, int span, char *alg)
 
 int rpnconverter_infix2rpn_orderofoperation_checkparentheses(char *alg)
 {
+    if(strlen(alg) <= 0)
+    {
+        perror("Error: Algorithm Size");
+        return 0;
+    }
     //Initialize Variables
-    int check = 0;
+    int check = 1;
     char *specialOperator = "()";
     //Check The Input Algorithm For Any Parentheses. If Any Are Found Return The Number Of Occurences
     for(int i=0;i<strlen(alg);i++)
