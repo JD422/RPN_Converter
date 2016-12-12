@@ -69,7 +69,7 @@ char *rpnconverter_infix2rpn(char *alg)
     //Initialize main variables
     int i = 0, j = 0, span = 1;
     char * infixAlg = rpnconverter_infix2rpn_strip(alg);
-    char * infixOperators = rpnconverter_infix2rpn_getOperatorArray(alg);
+    char * infixOperators = rpnconverter_infix2rpn_getoperatorarray(alg);
     char * infixTemp = calloc(strlen(alg)+1,sizeof(char));
     
     //Loop through all characters from the input string and check them against the operators array.
@@ -81,9 +81,9 @@ char *rpnconverter_infix2rpn(char *alg)
         if(infixAlg[i] == infixOperators[j])
         {
             strcpy(infixTemp, infixAlg);
-            if(rpnconverter_isValidOperator(infixAlg[i+2]) == 0 && (i+2) < strlen(infixAlg))
+            if(rpnconverter_isvalidoperator(infixAlg[i+2]) == 0 && (i+2) < strlen(infixAlg))
             {
-                while(rpnconverter_isValidOperator(infixAlg[i+span]) == 0 && i+span < strlen(infixAlg))
+                while(rpnconverter_isvalidoperator(infixAlg[i+span]) == 0 && i+span < strlen(infixAlg))
                 {
                         span++;
                 }
@@ -169,7 +169,7 @@ char *rpnconverter_rpn2infix(char *alg)
         if(rpnAlg[i] == rpnOperators[k])
         {
             strcpy(rpnTemp, rpnAlg);
-            if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-1] == brackets[1])
+            if(rpnconverter_isvalidoperator(rpnAlg[i-2]) == 0 && rpnAlg[i-1] == brackets[1])
             {
                 span = 1;
                 l=rpnconverter_rpn2infix_span(i,span,rpnAlg);
@@ -204,14 +204,14 @@ char *rpnconverter_rpn2infix(char *alg)
                 rpnAlg[i-l+1] = rpnTemp[i-l];
                 l--;
                 rpnAlg[i-l+1] = rpnTemp[i];
-                while(r>0)
+                while(l>0)
                 {
                     rpnAlg[i-l+2] = rpnTemp[i-l];
-                    r--;
+                    l--;
                 }
                 rpnAlg[i+2] = brackets[1];
             }
-            else if(rpnconverter_isValidOperator(rpnAlg[i-2]) == 0 && rpnAlg[i-2] != brackets[1])
+            else if(rpnconverter_isvalidoperator(rpnAlg[i-2]) == 0 && rpnAlg[i-2] != brackets[1])
             {
                 rpnAlg[i-2] = brackets[0];
                 rpnAlg[i-1] = rpnTemp[i-2];
@@ -235,7 +235,7 @@ char *rpnconverter_rpn2infix(char *alg)
             for(n = i+1;n<strlen(rpnTemp);n++)
             {
                 j++;
-                rpnAlg[i+2+p] = rpnTemp[n];
+                rpnAlg[i+2+j] = rpnTemp[n];
             }
             i+=2;
             k++;
@@ -289,7 +289,7 @@ int rpnconverter_rpn2infix_span(int i, int span, char *rpn)
     int j=0,k=span;
     char * brackets = "()";
     //Calculate the span between chosen brackets
-    while(rpnconverter_isValidOperator(rpn[i-span]) == 0 && rpn[i-span] == brackets[1])
+    while(rpnconverter_isvalidoperator(rpn[i-span]) == 0 && rpn[i-span] == brackets[1])
     {
         span++;
     }
@@ -339,7 +339,7 @@ int rpnconverter_countoperators(char *alg)
     return countOperators;
 };
 
-char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
+char *rpnconverter_infix2rpn_getoperatorarray(char *alg)
 {
     char *error = calloc(30+1,sizeof(char));
     if(strlen(alg) <= 0)
@@ -349,7 +349,7 @@ char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
     }
     //Initialize Variables
     int i = 0, j = 0, k = 0, countSpan = 0, skipParentheses = 0, loop = 0;
-    int countParentheses = rpnconverter_infix2rpn_orderOfOperation_checkParentheses(alg);
+    int countParentheses = rpnconverter_infix2rpn_orderofoperation_checkparentheses(alg);
     int numOperators = rpnconverter_countoperators(alg);
     char *operatorArray;
     char *tempArray;
@@ -358,7 +358,7 @@ char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
     //If Algorithm Does Have Parentheses Then Parse Out Sub Algorithms Delimited By Parentheses And Perform OrderOfOperation Function On Each Sub Algorithm Then Combine Returned Operators Respecting OrderOfOperation Changes Caused By The Parentheses
     if(countParentheses == 0)
     {
-        operatorArray = rpnconverter_infix2rpn_orderOfOperation(0,strlen(alg),alg);
+        operatorArray = rpnconverter_infix2rpn_orderofoperation(0,strlen(alg),alg);
     }
     else
     {
@@ -385,7 +385,7 @@ char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
                     }
                 }
                 loop = 0;
-                tempArray = rpnconverter_infix2rpn_orderOfOperation(i-countSpan+1,countSpan,alg);
+                tempArray = rpnconverter_infix2rpn_orderofoperation(i-countSpan+1,countSpan,alg);
                 countSpan = 0;
                 j=0;
                 while(j<strlen(tempArray))
@@ -403,7 +403,7 @@ char *rpnconverter_infix2rpn_getOperatorArray(char *alg)
     return operatorArray;
 };
 
-char *rpnconverter_infix2rpn_orderOfOperation(int start, int span, char *alg)
+char *rpnconverter_infix2rpn_orderofoperation(int start, int span, char *alg)
 {
     //Initialize Variables
     int i = 0, j = 0, nestFound = 0;
@@ -461,7 +461,7 @@ char *rpnconverter_infix2rpn_orderOfOperation(int start, int span, char *alg)
     return orderArray;
 };
 
-int rpnconverter_infix2rpn_orderOfOperation_checkParentheses(char *alg)
+int rpnconverter_infix2rpn_orderofoperation_checkparentheses(char *alg)
 {
     //Initialize Variables
     int check = 0;
@@ -477,7 +477,7 @@ int rpnconverter_infix2rpn_orderOfOperation_checkParentheses(char *alg)
     return check;
 };
 
-int rpnconverter_isValidOperator(char operator)
+int rpnconverter_isvalidoperator(char operator)
 {
     //Initialize Variables
     int isOperator = 0;

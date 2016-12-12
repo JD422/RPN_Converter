@@ -79,10 +79,40 @@ rpnconverter("a+b"); //outputs "ab+"
 ```c
 rpnconverter_infix2rpn("a+b"); //outputs "ab+"
 ```
+#### Infix2RPN_Strip Function
+    This function takes a string with an algorithm written in Infix Notation and strips the parentheses from it.
+```c
+rpnconverter_infix2rpn_strip("(c+d)/(e-f)"); //outputs "c+d/e-f"
+```
+#### Infix2RPN_GetOperatorArray Function
+    This function takes a string with an algorithm written in Infix Notation and returns an array of all the operators used while adjusting for the order of operation while handling changes due to parentheses.
+```c
+rpnconverter_infix2rpn_getoperatorarray("(a*b^((c+d)/(e-f))^g)"); //outputs "+-/^^*"
+```
+#### Infix2RPN_OrderOfOperation Function
+    This function takes a starting index, a span, and a string with an algorithm written in Infix Notation. It returns an array of operators used according to order of operation. This function will ignore parentheses.
+```c
+rpnconverter_infix2rpn_orderofoperation(0,13,"a*b^c+d/e-f^g"); //outputs "^^*/+-"
+```
+#### Infix2RPN_OrderOfOperation_CheckParentheses Function
+    This function takes a string with an algorithm written in Infix Notation with parentheses and returns the number of pairs of parentheses.
+```c
+rpnconverter_infix2rpn_orderofoperation_checkparentheses("(a*b^((c+d)/(e-f))^g)"); //outputs 4
+```
 #### RPN2Infix Function
-    This Function takes a string with an algorithm written in RPN and converts it directly to Infix Notation with Parentheses.
+    This function takes a string with an algorithm written in RPN and converts it directly to Infix Notation with Parentheses.
 ```c
 rpnconverter_rpn2infix("ab+"); //outputs "(a+b)"
+```
+#### RPN2Infix_GetOperators Function
+    This function takes a string with an algorithm written in RPN and returns an array of the operators used in the notation.
+```c
+rpnconverter_rpn2infix_getoperators("ag+ba-c+cedf^*+^*"); //outputs "+-+^*+^*"
+```
+#### RPN2Infix_Span Function
+    This function takes a starting index, a span, and a string with an algorithm written in RPN and returns the span between parentheses.
+```c
+rpnconverter_rpn2infix_span(14,2,"((a/b)+(c^d))f+"); //outputs 14
 ```
 #### Autoselect Function
     This function accepts a string with an algorithm in either RPN or Infix Notation and returns an identifier of 2 to represent that the inputted algorithm is in Infix Notation or 1 if the inputted algorithm is in RPN.
@@ -90,10 +120,16 @@ rpnconverter_rpn2infix("ab+"); //outputs "(a+b)"
 rpnconverter_autoselect("a+b"); //outputs 2 for infix
 rpnconverter_autoselect("ab+"); //outputs 1 for rpn
 ```
-#### OrderOfOperation Function
-    This function accepts a string with an algorithm in Infix Notation and returns a string of the operators from the inputted string in the correct order of operation. This algorithm also automatically handles change of order of operation due to parentheses.
+#### CountOperators Function
+    This function accepts a string with an algorithm and returns the number of operators.
 ```c
-rpnconverter_orderOfOperation("(a*b^((c+d)/(e-f))^g)"); //outputs "+-/^^*"
+rpnconverter_countoperators("ab+cd*-"); //outputs 3
+```
+#### IsValidOperator Function
+    This function accepts a character and returns a one if it is a valid operator or a zero if it is not.
+```c
+rpnconverter_isvalidoperator("+"); //outputs 1
+rpnconverter_isvalidoperator("a"); //outputs 0
 ```
 
 ## Tests
@@ -117,5 +153,5 @@ make clean
 
 Valgrind was used to test for memory leaks using the following command
 ```c
-valgrind ./rpnconverter --leak-check=full
+valgrind --tool=memcheck --leak-check=full ./rpnconverter 
 ```
